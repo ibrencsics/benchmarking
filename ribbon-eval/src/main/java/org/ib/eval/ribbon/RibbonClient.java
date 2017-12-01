@@ -22,6 +22,8 @@ import com.netflix.loadbalancer.Server;
 public class RibbonClient {
 
     private static Logger logger = LogManager.getLogger(RibbonClient.class);
+    private static final int REQ_COUNT = 50;
+
 
     public static void main(String[] args) throws Exception {
         call();
@@ -33,7 +35,8 @@ public class RibbonClient {
             .buildFixedServerListLoadBalancer(servers);
 
         LoadBalancingHttpClient<ByteBuf, ByteBuf> client = RibbonTransport.newHttpClient(lb);
-        final CountDownLatch latch = new CountDownLatch(servers.size());
+        final CountDownLatch latch = new CountDownLatch(REQ_COUNT);
+
         Observer<HttpClientResponse<ByteBuf>> observer = new Observer<HttpClientResponse<ByteBuf>>() {
             @Override
             public void onCompleted() {
@@ -50,11 +53,12 @@ public class RibbonClient {
                 logger.debug("Got response: " + args.getStatus());
             }
         };
-        for (int i = 0; i < 20/*servers.size()*/; i++) {
-//            Thread.sleep(500);
-            HttpClientRequest<ByteBuf> request = HttpClientRequest.createGet("/");
+
+        for (int i = 0; i < REQ_COUNT ; i++) {
+            HttpClientRequest<ByteBuf> request = HttpClientRequest.createGet("/" + i);
             client.submit(request).subscribe(observer);
         }
+
         latch.await();
         System.out.println(lb.getLoadBalancerStats());
     }
