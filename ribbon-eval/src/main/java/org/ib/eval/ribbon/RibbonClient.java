@@ -38,7 +38,7 @@ public class RibbonClient {
 
     private static void call() throws Exception {
         ConfigurationManager.loadPropertiesFromResources("sample-client.properties");  // 1
-        System.out.println(ConfigurationManager.getConfigInstance().getString("sample-client.ribbon.listOfServers"));
+//        System.out.println(ConfigurationManager.getConfigInstance().getString("sample-client.ribbon.listOfServers"));
 
 //        Configuration config = ConfigurationManager.getConfigInstance();
 //        config.setProperty("client1.niws.client." + IClientConfigKey.Keys.DeploymentContextBasedVipAddresses, "dummy:7001");
@@ -49,12 +49,13 @@ public class RibbonClient {
 //        config.setProperty("client1.niws.client." + IClientConfigKey.Keys.NIWSServerListFilterClassName, ZoneAffinityServerListFilter.class.getName());
         IClientConfig clientConfig = IClientConfig.Builder.newBuilder(DefaultClientConfigImpl.class, "sample-client").build();
         System.out.println(clientConfig.getPropertyAsString(IClientConfigKey.Keys.MaxAutoRetries, "def"));
+        System.out.println(clientConfig.getPropertyAsString(IClientConfigKey.Keys.ListOfServers, "def"));
 
-        List<Server> servers = Lists.newArrayList(new Server("localhost:8000"), new Server("localhost:8001"));
-        BaseLoadBalancer lb = LoadBalancerBuilder.newBuilder()
+//        List<Server> servers = Lists.newArrayList(new Server("localhost:8000"), new Server("localhost:8001"));
+        ILoadBalancer lb = LoadBalancerBuilder.newBuilder()
             .withClientConfig(clientConfig)
-//            .buildLoadBalancerFromConfigWithReflection();
-            .buildFixedServerListLoadBalancer(servers);
+            .buildLoadBalancerFromConfigWithReflection();
+//            .buildFixedServerListLoadBalancer(servers);
 
         LoadBalancingHttpClient<ByteBuf, ByteBuf> client = RibbonTransport.newHttpClient(lb);
         final CountDownLatch latch = new CountDownLatch(REQ_COUNT);
@@ -80,9 +81,10 @@ public class RibbonClient {
             Thread.sleep(500);
             HttpClientRequest<ByteBuf> request = HttpClientRequest.createGet("/" + i);
             client.submit(request).subscribe(observer);
+//            logger.debug("Sent {}", i);
         }
 
         latch.await();
-        logger.debug(lb.getLoadBalancerStats());
+//        logger.debug(lb.getLoadBalancerStats());
     }
 }

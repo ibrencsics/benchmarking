@@ -10,6 +10,7 @@
     <modules>
         <module>netty-simple-http-server</module>
         <module>ribbon-eval</module>
+        <module>grpc-eval</module>
     </modules>
     <packaging>pom</packaging>
 

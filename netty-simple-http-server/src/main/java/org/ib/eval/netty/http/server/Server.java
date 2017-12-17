@@ -48,7 +48,7 @@ public class Server {
             System.err.println("Please give port as argument");
             System.exit(1);
         }
-        int port = Integer.parseInt(args[0]);
+        int port = Integer.parseInt(args[0].trim());
 
         final Server endpoint = new Server();
         ChannelFuture future = endpoint.start(new InetSocketAddress(port));
