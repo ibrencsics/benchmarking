@@ -11,6 +11,7 @@
         <module>netty-simple-http-server</module>
         <module>ribbon-eval</module>
         <module>grpc-eval</module>
+        <module>jaxrs-eval</module>
     </modules>
     <packaging>pom</packaging>
 

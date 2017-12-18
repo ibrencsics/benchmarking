@@ -48,3 +48,10 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
 
 // https://logging.apache.org/log4j/2.x/manual/configuration.html
+
+
+// TCP keepalive: https://stackoverflow.com/questions/1480236/does-a-tcp-socket-connection-have-a-keep-alive
+
+// JSON streaming parser:
+// * http://www.baeldung.com/jackson-streaming-api
+// * https://www.mkyong.com/java/jackson-streaming-api-to-read-and-write-json/
