@@ -12,6 +12,9 @@
         <module>ribbon-eval</module>
         <module>grpc-eval</module>
         <module>jaxrs-eval</module>
+        <module>servlet-eval</module>
+        <module>fe-poc</module>
+        <module>simple-perf-eval</module>
     </modules>
     <packaging>pom</packaging>
 
